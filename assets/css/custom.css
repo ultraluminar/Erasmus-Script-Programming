@@ -1,0 +1,117 @@
+
+
+/* --- Headings --- */
+
+h1 {
+    color: #4CAF50;
+    font-family: 'Georgia', serif;
+    font-size: 70px;
+    font-weight: 900;
+    line-height: 90px;
+}
+
+h2 {
+    color: #FF5722;
+    font-family: 'Georgia', serif;
+    font-size: 55px;
+    font-weight: 700;
+    line-height: 70px;
+}
+
+h3 {
+    color: #6cc96f;
+    font-family: 'Georgia', serif;
+    font-size: 45px;
+    font-weight: 600;
+    line-height: 50px;
+}
+
+
+/* --- Buttons and Links --- */
+
+.btn {
+    border-radius: 2px 50px 2px 50px !important;
+}
+
+.btn:hover {
+    border-radius: 30px 20px 30px 20px !important;
+}
+
+.btn-primary {
+    background-color: #6cc96f !important;
+    border-color: #6cc96f !important;
+    color: black !important;
+}
+
+.btn-primary:hover {
+    border-style: dashed !important;
+    color: #FF5722 !important;
+    border-color: #FF5722 !important;
+    background-color: white !important;
+}
+
+.btn-outline {
+    border-style: dashed !important;
+    color: #FF5722 !important;
+    border-color: #FF5722 !important;
+}
+
+.btn-outline:hover {
+    border-style: solid !important;
+    color: black !important;
+    border-color: #6cc96f !important;
+    background-color: #6cc96f !important;
+}
+
+.social-links a {
+    border-radius: 10% / 50% !important;
+    border-style: dotted !important;
+    border-color: #FF5722 !important;
+}
+
+.social-links a:hover {
+    border: none !important;
+    background-color: #6cc96f !important;
+}
+
+.portfolio-filters li {
+    border-radius: 2px 50px 2px 50px !important;
+}
+
+.portfolio-filters li:hover {
+    border-radius: 30px 20px 30px 20px !important;
+}
+
+.portfolio-filters li.filter-active {
+    background-color: purple !important;
+    border: 2px dashed white !important;
+}
+
+
+/* --- Elements --- */
+
+#scroll-top {
+    border-radius: 100% 5px 0 5px;
+    padding: 30px 20px 20px 30px;
+    bottom: 10px;
+    right: 10px;
+    border: 15px solid #065cc2;
+    background-color: white;
+}
+
+#scroll-top i {
+    color: #065cc2
+}
+
+#scroll-top:hover {
+    border-color: #4CAF50;
+}
+
+#scroll-top:hover i {
+    color: #4CAF50;
+}
+
+.skill-badge {
+    border-radius: 50% 10%/50% 50% !important;
+    border: 3px dotted white
+}
