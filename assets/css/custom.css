@@ -404,3 +404,92 @@ table.project-table th {
         animation-play-state: paused !important;
     }
 }
+
+/* Animated CSS Gradient Background */
+.animated-gradient-bg {
+    background: linear-gradient(270deg, #4CAF50, #FF5722, #6cc96f, #065cc2);
+    background-size: 800% 800%;
+    animation: gradientAnimation 20s ease infinite;
+    height: 500px;
+}
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Decorative CSS shapes fixed to the viewport floating and rotiating animated */
+@keyframes floatRotate {
+    0% {
+        transform: translateY(-75px) translateX(10px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-50px) translateX(100px) rotate(90deg);
+    }
+    50% {
+        transform: translateY(200px) translateX(-13px) rotate(180deg);
+    }
+    75% {
+        transform: translateY(-15px) translateX(75px) rotate(270deg);
+    }
+    100% {
+        transform: translateY(-75px) translateX(10px) rotate(360deg);
+    }
+}
+
+@keyframes floatRotateReverse {
+    0% {
+        transform: translateY(30px) translateX(0px) rotate(0deg);
+    }
+    25% {
+        transform: translateY(-50px) translateX(100px) rotate(-90deg);
+    }
+    50% {
+        transform: translateY(-200px) translateX(-13px) rotate(-180deg);
+    }
+    75% {
+        transform: translateY(15px) translateX(75px) rotate(-270deg);
+    }
+    100% {
+        transform: translateY(30px) translateX(0px) rotate(-360deg);
+    }
+}
+
+.decorative-shape1 {
+    position: fixed;
+    width: 100px;
+    height: 100px;
+    top: 20px;
+    left: 20px;
+    background-color: rgba(108, 201, 111, 0.3);
+    border: 2px solid #4CAF50;
+    border-radius: 20% / 50%;
+    animation: floatRotate 10s linear infinite;
+    z-index: 1;
+}
+
+.decorative-shape2 {
+    position: fixed;
+    width: 150px;
+    height: 150px;
+    bottom: 30px;
+    right: 30px;
+    background-color: rgba(255, 87, 34, 0.3);
+    border: 2px solid #FF5722;
+    border-radius: 50% / 20%;
+    animation: floatRotateReverse 12s linear infinite;
+    z-index: 1;
+}
+
+.decorative-shape3 {
+    position: fixed;
+    width: 80px;
+    height: 80px;
+    top: 50%;
+    left: 50%;
+    background-color: rgba(6, 92, 194, 0.3);
+    border: 2px solid #065cc2;
+    border-radius: 30% / 70%;
+    animation: floatRotate 8s linear infinite;
+    z-index: 0;
+}
