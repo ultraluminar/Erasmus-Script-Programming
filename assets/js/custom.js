@@ -9,63 +9,66 @@ document.addEventListener('DOMContentLoaded', () => {
   const phoneField = document.getElementById('phone');
   const addressField = document.getElementById('address');
 
-  // Validation functions
-  function validateName(value) {
-    // Check if not empty and contains only letters (including spaces, hyphens, and apostrophes for compound names)
-    return value.trim() !== '' && /^[A-Za-z\s'-]+$/.test(value.trim());
+  // Check if all required fields exist before setting up validation
+  if (!nameField || !surnameField || !emailField || !phoneField || !addressField) {
+    console.warn('One or more form fields not found. Validation will not be set up.');
+    return;
   }
 
-  function validateSurname(value) {
-    // Check if not empty and contains only letters (including spaces, hyphens, and apostrophes for compound names)
-    return value.trim() !== '' && /^[A-Za-z\s'-]+$/.test(value.trim());
+  // Validation functions
+  function validateNameField(value) {
+    const trimmedValue = value.trim();
+    // Check if not empty and contains only letters (must start with a letter, then can include spaces, hyphens, and apostrophes)
+    return trimmedValue !== '' && /^[A-Za-z]+[A-Za-z\s'-]*$/.test(trimmedValue);
   }
 
   function validateEmail(value) {
+    const trimmedValue = value.trim();
     // Check if not empty and matches email format
-    return value.trim() !== '' && /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
+    // More comprehensive email regex that handles most common cases
+    return trimmedValue !== '' && /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(trimmedValue);
   }
 
   function validatePhone(value) {
-    // Check if not empty
-    return value.trim() !== '';
+    const trimmedValue = value.trim();
+    // Check if not empty and contains at least some digits (allows various phone formats with spaces, dashes, parentheses)
+    return trimmedValue !== '' && /\d/.test(trimmedValue);
   }
 
   function validateAddress(value) {
-    // Check if not empty and has at least 5 characters (meaningful text)
-    return value.trim() !== '' && value.trim().length >= 5;
+    const trimmedValue = value.trim();
+    // Check if not empty, has at least 5 characters, and contains at least one alphanumeric character
+    return trimmedValue !== '' && trimmedValue.length >= 5 && /[a-zA-Z0-9]/.test(trimmedValue);
+  }
+
+  // Helper function to apply validation state to a field
+  function applyValidationState(field, isValid) {
+    if (isValid) {
+      field.classList.remove('is-invalid');
+      field.classList.add('is-valid');
+    } else {
+      field.classList.remove('is-valid');
+      field.classList.add('is-invalid');
+    }
   }
 
   // Real-time validation on input
   function setupFieldValidation(field, validationFunc) {
     if (!field) return;
 
-    field.addEventListener('input', () => {
+    const validateField = () => {
       const isValid = validationFunc(field.value);
-      if (isValid) {
-        field.classList.remove('is-invalid');
-        field.classList.add('is-valid');
-      } else {
-        field.classList.remove('is-valid');
-        field.classList.add('is-invalid');
-      }
-    });
+      applyValidationState(field, isValid);
+    };
 
-    // Also validate on blur
-    field.addEventListener('blur', () => {
-      const isValid = validationFunc(field.value);
-      if (isValid) {
-        field.classList.remove('is-invalid');
-        field.classList.add('is-valid');
-      } else {
-        field.classList.remove('is-valid');
-        field.classList.add('is-invalid');
-      }
-    });
+    // Validate on input and blur events
+    field.addEventListener('input', validateField);
+    field.addEventListener('blur', validateField);
   }
 
   // Setup validation for all fields (except ratings)
-  setupFieldValidation(nameField, validateName);
-  setupFieldValidation(surnameField, validateSurname);
+  setupFieldValidation(nameField, validateNameField);
+  setupFieldValidation(surnameField, validateNameField);
   setupFieldValidation(emailField, validateEmail);
   setupFieldValidation(phoneField, validatePhone);
   setupFieldValidation(addressField, validateAddress);
@@ -74,23 +77,18 @@ document.addEventListener('DOMContentLoaded', () => {
     e.preventDefault();
 
     // Validate all fields before submission
-    const isNameValid = validateName(nameField.value);
-    const isSurnameValid = validateSurname(surnameField.value);
+    const isNameValid = validateNameField(nameField.value);
+    const isSurnameValid = validateNameField(surnameField.value);
     const isEmailValid = validateEmail(emailField.value);
     const isPhoneValid = validatePhone(phoneField.value);
     const isAddressValid = validateAddress(addressField.value);
 
-    // Update validation states
-    nameField.classList.toggle('is-invalid', !isNameValid);
-    nameField.classList.toggle('is-valid', isNameValid);
-    surnameField.classList.toggle('is-invalid', !isSurnameValid);
-    surnameField.classList.toggle('is-valid', isSurnameValid);
-    emailField.classList.toggle('is-invalid', !isEmailValid);
-    emailField.classList.toggle('is-valid', isEmailValid);
-    phoneField.classList.toggle('is-invalid', !isPhoneValid);
-    phoneField.classList.toggle('is-valid', isPhoneValid);
-    addressField.classList.toggle('is-invalid', !isAddressValid);
-    addressField.classList.toggle('is-valid', isAddressValid);
+    // Update validation states using helper function
+    applyValidationState(nameField, isNameValid);
+    applyValidationState(surnameField, isSurnameValid);
+    applyValidationState(emailField, isEmailValid);
+    applyValidationState(phoneField, isPhoneValid);
+    applyValidationState(addressField, isAddressValid);
 
     // Only proceed if all validations pass
     if (!isNameValid || !isSurnameValid || !isEmailValid || !isPhoneValid || !isAddressValid) {
