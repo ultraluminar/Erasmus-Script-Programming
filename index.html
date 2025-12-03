@@ -708,16 +708,16 @@
 
             <!-- MP4 Video -->
             <video controls>
-              <source src="assets/media/video/Wildlife Sample Video.mp4" type="video/mp4">
+              <source src="assets/media/video/Wildlife_Sample_Video.mp4" type="video/mp4">
               Your browser does not support the video tag.
             </video>
 
             <!-- YouTube Video -->
-            <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=H_c9SWAapTCh0i-T" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+            <iframe width="560" height="315" src="https://www.youtube.com/embed/dQw4w9WgXcQ?si=H_c9SWAapTCh0i-T" title="YouTube video player" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
 
             <!-- MP3 Audio -->
             <audio controls>
-              <source src="assets/media/audio/Rick Astley - Never Gonna Give You Up.mp3" type="audio/mpeg">
+              <source src="assets/media/audio/Rick_Astley_-_Never_Gonna_Give_You_Up.mp3" type="audio/mpeg">
               Your browser does not support the audio element.
             </audio>
 
@@ -1353,43 +1353,71 @@
             </div>
           </div>
 
-          <div class="col-lg-7">
-            <div class="contact-form" data-aos="fade-up" data-aos-delay="300">
-              <h3>Get In Touch</h3>
-              <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis.</p>
+            <div class="col-lg-7">
+              <div class="contact-form" data-aos="fade-up" data-aos-delay="300">
+                <h3>Get In Touch</h3>
+                <p>Praesent sapien massa, convallis a pellentesque nec, egestas non nisi. Vestibulum ante ipsum primis.</p>
 
-              <form action="forms/contact.php" method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
-                <div class="row gy-4">
+                <form method="post" class="php-email-form" data-aos="fade-up" data-aos-delay="200">
+                  <div class="row gy-4">
 
-                  <div class="col-md-6">
-                    <input type="text" name="name" class="form-control" placeholder="Your Name" required="">
+                    <div class="col-md-6">
+                      <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
+                      <div class="invalid-feedback">Name is required and must contain only letters.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <input type="text" id="surname" name="surname" class="form-control" placeholder="Surname" required>
+                      <div class="invalid-feedback">Surname is required and must contain only letters.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                      <div class="invalid-feedback">Please enter a valid email address.</div>
+                    </div>
+
+                    <div class="col-md-6">
+                      <input type="tel" id="phone" name="phone" class="form-control" placeholder="Phone number" required>
+                      <div class="invalid-feedback">Phone number is required and must contain digits.</div>
+                    </div>
+
+                    <div class="col-12">
+                      <input type="text" id="address" name="address" class="form-control" placeholder="Address" required>
+                      <div class="invalid-feedback">Address is required and must be a meaningful text.</div>
+                    </div>
+
+                    <!-- Rating 1 -->
+                    <div class="col-12">
+                      <label for="rating1" class="form-label">How satisfied are you? <span id="rating1-val" class="fw-bold">5</span>/10</label>
+                      <input type="range" id="rating1" name="rating1" min="0" max="10" value="5" class="form-range" oninput="document.getElementById('rating1-val').textContent = this.value;">
+                    </div>
+
+                    <!-- Rating 2 -->
+                    <div class="col-12">
+                      <label for="rating2" class="form-label">How likely are you to recommend us? <span id="rating2-val" class="fw-bold">5</span>/10</label>
+                      <input type="range" id="rating2" name="rating2" min="0" max="10" value="5" class="form-range" oninput="document.getElementById('rating2-val').textContent = this.value;">
+                    </div>
+
+                    <!-- Rating 3 -->
+                    <div class="col-12">
+                      <label for="rating3" class="form-label">How would you rate our support? <span id="rating3-val" class="fw-bold">5</span>/10</label>
+                      <input type="range" id="rating3" name="rating3" min="0" max="10" value="5" class="form-range" oninput="document.getElementById('rating3-val').textContent = this.value;">
+                    </div>
+
+                    <div class="col-12 text-center">
+                      <div class="loading">Loading</div>
+                      <!-- <div class="error-message"></div> -->
+                      <div class="sent-message">Your message has been sent. Thank you!</div>
+                      <div id="form-output"></div>
+
+                      <button type="submit" class="btn">Submit</button>
+                    </div>
+
                   </div>
+                </form>
 
-                  <div class="col-md-6 ">
-                    <input type="email" class="form-control" name="email" placeholder="Your Email" required="">
-                  </div>
-
-                  <div class="col-12">
-                    <input type="text" class="form-control" name="subject" placeholder="Subject" required="">
-                  </div>
-
-                  <div class="col-12">
-                    <textarea class="form-control" name="message" rows="6" placeholder="Message" required=""></textarea>
-                  </div>
-
-                  <div class="col-12 text-center">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">Your message has been sent. Thank you!</div>
-
-                    <button type="submit" class="btn">Send Message</button>
-                  </div>
-
-                </div>
-              </form>
-
+              </div>
             </div>
-          </div>
 
         </div>
 
@@ -1573,6 +1601,7 @@
             <div class="example-card p-4 rounded shadow-sm animated-gradient-bg">
               <h3 class="mb-3">Gradient Background</h3>
             </div>
+          </div>
 
         </div>
       </div>
@@ -1621,6 +1650,7 @@
 
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
+  <script src="assets/js/custom.js"></script>
 
   <div class="decorative-shape1"></div>
   <div class="decorative-shape2"></div>
