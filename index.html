@@ -1362,23 +1362,28 @@
                   <div class="row gy-4">
 
                     <div class="col-md-6">
-                      <input type="text" name="name" class="form-control" placeholder="Name" required>
+                      <input type="text" id="name" name="name" class="form-control" placeholder="Name" required>
+                      <div class="invalid-feedback">Name is required and must contain only letters.</div>
                     </div>
 
                     <div class="col-md-6">
-                      <input type="text" name="surname" class="form-control" placeholder="Surname" required>
+                      <input type="text" id="surname" name="surname" class="form-control" placeholder="Surname" required>
+                      <div class="invalid-feedback">Surname is required and must contain only letters.</div>
                     </div>
 
                     <div class="col-md-6">
-                      <input type="email" name="email" class="form-control" placeholder="Email" required>
+                      <input type="email" id="email" name="email" class="form-control" placeholder="Email" required>
+                      <div class="invalid-feedback">Please enter a valid email address.</div>
                     </div>
 
                     <div class="col-md-6">
-                      <input type="tel" name="phone" class="form-control" placeholder="Phone number">
+                      <input type="tel" id="phone" name="phone" class="form-control" placeholder="Phone number" required>
+                      <div class="invalid-feedback">Phone number is required and must contain digits.</div>
                     </div>
 
                     <div class="col-12">
-                      <input type="text" name="address" class="form-control" placeholder="Address">
+                      <input type="text" id="address" name="address" class="form-control" placeholder="Address" required>
+                      <div class="invalid-feedback">Address is required and must be a meaningful text.</div>
                     </div>
 
                     <!-- Rating 1 -->
