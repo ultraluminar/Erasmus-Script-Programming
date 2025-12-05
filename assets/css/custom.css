@@ -571,3 +571,147 @@ table.project-table th {
     animation: floatRotate 8s linear infinite;
     z-index: 0;
 }
+
+
+
+/* -------------------------- */
+/* --- Memory Game Styles --- */
+
+.memory-game-ui {
+    max-width: 900px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 15px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.05);
+}
+
+.game-controls {
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 10px;
+    border: 1px solid #e9ecef;
+}
+
+.control-group label {
+    color: #495057;
+    margin-right: 10px;
+}
+
+.stats-panel .stat-item {
+    font-size: 1.1rem;
+    color: #495057;
+    background: #fff;
+    padding: 5px 15px;
+    border-radius: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+}
+
+.memory-game-grid {
+    display: grid;
+    gap: 15px;
+    margin-top: 30px;
+    perspective: 1000px;
+    justify-content: center;
+    padding: 10px;
+}
+
+/* Grid Layouts */
+.grid-easy {
+    grid-template-columns: repeat(4, 1fr);
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.grid-hard {
+    grid-template-columns: repeat(6, 1fr);
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.memory-card {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1;
+    transform-style: preserve-3d;
+    transition: transform 0.6s cubic-bezier(0.4, 0.0, 0.2, 1);
+    cursor: pointer;
+}
+
+.memory-card.flip {
+    transform: rotateY(180deg);
+}
+
+.memory-card .front-face,
+.memory-card .back-face {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    backface-visibility: hidden;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-size: 2.5rem;
+    user-select: none;
+}
+
+.memory-card .front-face {
+    background-color: #fff;
+    transform: rotateY(180deg);
+    border: 2px solid #e9ecef;
+}
+
+.memory-card .back-face {
+    background-color: #6cc96f;
+    background-image:
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 2px, transparent 2.5px),
+        radial-gradient(circle at 50% 50%, rgba(255, 255, 255, 0.2) 2px, transparent 2.5px);
+    background-size: 20px 20px;
+    background-position: 0 0, 10px 10px;
+    border: 2px solid #5cb85c;
+}
+
+.memory-card:active {
+    transform: scale(0.95);
+    transition: transform 0.1s;
+}
+
+/* Win Message */
+.win-message {
+    background: linear-gradient(135deg, rgba(108, 201, 111, 0.1), rgba(6, 92, 194, 0.1));
+    border: 2px dashed #6cc96f;
+    border-radius: 10px;
+    padding: 30px;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .game-controls {
+        flex-direction: column;
+        align-items: stretch !important;
+    }
+
+    .stats-panel {
+        justify-content: center;
+        margin: 10px 0;
+    }
+
+    .button-group {
+        justify-content: center;
+    }
+
+    .memory-card .front-face {
+        font-size: 1.8rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .grid-hard {
+        grid-template-columns: repeat(4, 1fr);
+        /* Fallback to 4 cols on small screens */
+    }
+}

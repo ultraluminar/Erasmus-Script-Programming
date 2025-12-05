@@ -1608,6 +1608,52 @@
 
     </section><!-- /Examples Section -->
 
+    <!-- Memory Game Section -->
+    <section id="memory-game" class="memory-game section light-background">
+
+      <!-- Section Title -->
+      <div class="container section-title">
+        <h2>Memory Game</h2>
+        <p>Test your memory with this fun and interactive game!</p>
+      </div><!-- End Section Title -->
+
+      <div class="container" data-aos="fade-up" data-aos-delay="100">
+
+        <div class="memory-game-ui">
+          <div class="game-controls mb-4 d-flex flex-wrap align-items-center justify-content-between gap-3">
+            <div class="control-group d-flex align-items-center gap-2">
+              <label for="difficulty" class="fw-bold">Difficulty:</label>
+              <select id="difficulty" class="form-select w-auto">
+                <option value="easy">Easy (4x3)</option>
+                <option value="hard">Hard (6x4)</option>
+              </select>
+            </div>
+
+            <div class="stats-panel d-flex gap-4">
+              <div class="stat-item fw-bold">Moves: <span id="moves-count" class="text-primary">0</span></div>
+              <div class="stat-item fw-bold">Matches: <span id="matches-count" class="text-success">0</span></div>
+            </div>
+
+            <div class="button-group d-flex gap-2">
+              <button id="start-button" class="btn btn-primary">Start Game</button>
+              <button id="restart-button" class="btn btn-outline" disabled>Restart</button>
+            </div>
+          </div>
+
+          <div id="win-message" class="win-message text-center mb-4 d-none">
+            <h3 class="text-success">Congratulations! You Won!</h3>
+            <p>You completed the game in <span id="final-moves">0</span> moves.</p>
+          </div>
+
+          <div class="memory-game-grid" id="memory-game-grid">
+            <!-- Cards will be dynamically generated here -->
+          </div>
+        </div>
+
+      </div>
+
+    </section><!-- /Memory Game Section -->
+
   </main>
 
   <footer id="footer" class="footer dark-background">
@@ -1651,6 +1697,7 @@
   <!-- Main JS File -->
   <script src="assets/js/main.js"></script>
   <script src="assets/js/custom.js"></script>
+  <script src="assets/js/memory-game.js"></script>
 
   <div class="decorative-shape1"></div>
   <div class="decorative-shape2"></div>
