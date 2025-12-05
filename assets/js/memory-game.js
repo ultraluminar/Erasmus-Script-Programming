@@ -1,5 +1,6 @@
 document.addEventListener('DOMContentLoaded', () => {
   // --- Configuration ---
+  const leaderboardStorageKey = 'memory-game-leaderboard';
   const fruits = [
     '1-pear.svg',
     '1-strawberries.svg',
@@ -29,6 +30,8 @@ document.addEventListener('DOMContentLoaded', () => {
   let matches = 0;
   let totalPairs = 0;
   let gameActive = false;
+  let timerInterval;
+  let secondsElapsed = 0;
 
   // --- Elements ---
   const grid = document.getElementById('memory-game-grid');
@@ -37,6 +40,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const restartButton = document.getElementById('restart-button');
   const movesDisplay = document.getElementById('moves-count');
   const matchesDisplay = document.getElementById('matches-count');
+  const timeDisplay = document.getElementById('time-elapsed');
   const winMessage = document.getElementById('win-message');
   const finalMovesDisplay = document.getElementById('final-moves');
 
@@ -50,13 +54,16 @@ document.addEventListener('DOMContentLoaded', () => {
   function resetGameUI() {
     // Stop current game
     gameActive = false;
+    stopTimer();
     grid.innerHTML = '';
     grid.className = 'memory-game-grid'; // Reset grid classes
 
     // Reset stats display
     moves = 0;
     matches = 0;
+    resetTimer();
     updateStats();
+    renderLeaderboard();
 
     // Reset buttons
     startButton.disabled = false;
@@ -69,6 +76,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function startGame() {
     resetGameUI();
     gameActive = true;
+    startTimer();
     startButton.disabled = true;
     restartButton.disabled = false;
 
@@ -198,7 +206,118 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function endGame() {
     gameActive = false;
+    stopTimer();
     finalMovesDisplay.textContent = moves;
+
+    // Update final time display if it exists
+    const finalTimeDisplay = document.getElementById('final-time');
+    if (finalTimeDisplay) {
+        finalTimeDisplay.textContent = formatTime(secondsElapsed);
+    }
+
+    // Save Score
+    const difficulty = difficultySelect.value;
+    saveScore(difficulty, moves, secondsElapsed);
+    renderLeaderboard();
+
     winMessage.classList.remove('d-none');
   }
+
+  // --- Leaderboard Functions ---
+
+  function loadLeaderboard(difficulty) {
+    const data = localStorage.getItem(leaderboardStorageKey);
+    if (!data) return [];
+    const leaderboard = JSON.parse(data);
+    return leaderboard[difficulty] || [];
+  }
+
+  function saveScore(difficulty, moves, time) {
+    const data = localStorage.getItem(leaderboardStorageKey);
+    let leaderboard = data ? JSON.parse(data) : { easy: [], hard: [] };
+
+    if (!leaderboard[difficulty]) leaderboard[difficulty] = [];
+
+    const date = new Date().toLocaleDateString() + ' ' + new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+    const newScore = {
+      moves: moves,
+      time: time, // in seconds
+      date: date
+    };
+
+    leaderboard[difficulty].push(newScore);
+
+    // Sort: Moves ASC, then Time ASC
+    leaderboard[difficulty].sort((a, b) => {
+      if (a.moves !== b.moves) return a.moves - b.moves;
+      return a.time - b.time;
+    });
+
+    // Keep top 5
+    leaderboard[difficulty] = leaderboard[difficulty].slice(0, 5);
+
+    localStorage.setItem('memory-game-leaderboard', JSON.stringify(leaderboard));
+
+    // Return true if this score made it to the top 5
+    return leaderboard[difficulty].some(s => s === newScore); // Simple reference check won't work after stringify/parse if we reloaded, but here it works as we just pushed it.
+    // Actually, let's just check if it's in the list.
+  }
+
+  function renderLeaderboard() {
+    const difficulty = difficultySelect.value;
+    const scores = loadLeaderboard(difficulty);
+    const tbody = document.getElementById('leaderboard-body');
+    tbody.innerHTML = '';
+
+    if (scores.length === 0) {
+      const row = document.createElement('tr');
+      row.innerHTML = '<td colspan="4" class="text-muted">No runs yet</td>';
+      tbody.appendChild(row);
+      return;
+    }
+
+    scores.forEach((score, index) => {
+      const row = document.createElement('tr');
+      row.innerHTML = `
+        <td>${index + 1}</td>
+        <td>${score.moves}</td>
+        <td>${formatTime(score.time)}</td>
+        <td><small>${score.date}</small></td>
+      `;
+      tbody.appendChild(row);
+    });
+  }
+
+  // --- Timer Functions ---
+  function startTimer() {
+    stopTimer();
+    secondsElapsed = 0;
+    timeDisplay.textContent = formatTime(secondsElapsed);
+
+    timerInterval = setInterval(() => {
+      secondsElapsed++;
+      timeDisplay.textContent = formatTime(secondsElapsed);
+    }, 1000);
+  }
+
+  function stopTimer() {
+    clearInterval(timerInterval);
+  }
+
+  function resetTimer() {
+    secondsElapsed = 0;
+    timeDisplay.textContent = formatTime(secondsElapsed);
+  }
+
+  function formatTime(seconds) {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    const formattedMinutes = String(minutes).padStart(2, '0');
+    const formattedSeconds = String(remainingSeconds).padStart(2, '0');
+    return `${formattedMinutes}:${formattedSeconds}`;
+  }
+
+  // Initial Render
+  renderLeaderboard();
 });
