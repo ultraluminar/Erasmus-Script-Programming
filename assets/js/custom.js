@@ -1,21 +1,27 @@
 document.addEventListener('DOMContentLoaded', () => {
+  // -------------------------------------------------------------------------
+  // 1. Element Selection & Validation Setup
+  // -------------------------------------------------------------------------
   const form = document.querySelector('form.php-email-form');
   if (!form) return;
 
-  // --- Validation functions & setup ---
   const nameField = document.getElementById('name');
   const surnameField = document.getElementById('surname');
   const emailField = document.getElementById('email');
   const phoneField = document.getElementById('phone');
   const addressField = document.getElementById('address');
-
   const submitButton = form.querySelector('button[type="submit"], input[type="submit"]');
+  const output = document.getElementById('form-output');
 
+  // Check required fields
   if (!nameField || !surnameField || !emailField || !phoneField || !addressField) {
     console.warn('One or more form fields not found. Validation will not be set up.');
     return;
   }
 
+  // -------------------------------------------------------------------------
+  // 2. Initialization
+  // -------------------------------------------------------------------------
   // Setup validation for all fields
   setupFieldValidation(nameField, validateNameField);
   setupFieldValidation(surnameField, validateNameField);
@@ -23,10 +29,64 @@ document.addEventListener('DOMContentLoaded', () => {
   setupFieldValidation(phoneField, validatePhone);
   setupFieldValidation(addressField, validateAddress);
 
+  // Setup specific masks
   setupPhoneMask(phoneField);
+
+  // Initial state check
   updateSubmitState();
 
-  // Submit button state: remain disabled while form invalid
+  // -------------------------------------------------------------------------
+  // 3. Event Listeners
+  // -------------------------------------------------------------------------
+  form.addEventListener('submit', handleFormSubmit);
+
+  // -------------------------------------------------------------------------
+  // 4. Event Handlers
+  // -------------------------------------------------------------------------
+  function handleFormSubmit(e) {
+    e.preventDefault();
+
+    if (!isFormValid()) {
+      return;
+    }
+
+    // collect values
+    const fd = new FormData(form);
+    const data = {};
+    for (const [key, value] of fd.entries()) {
+      data[key] = value;
+    }
+
+    if (!output) return;
+
+    // clear previous content and render lines
+    output.innerHTML = '';
+    Object.entries(data).forEach(([k, v]) => {
+      const line = document.createElement('div');
+      const text = `${niceLabel(k)}: ${Array.isArray(v) ? v.join(', ') : v}`;
+      line.textContent = text;
+      console.log(text);
+      output.appendChild(line);
+    });
+
+    // print average rating
+    let average_rating = calculateAverageRating(data);
+    const line = document.createElement('div');
+    line.textContent = `${data.name} ${data.surname}: `;
+    const span = document.createElement('span');
+    span.textContent = `${average_rating}`;
+    let color = average_rating > 6 ? 'green' : average_rating > 3 ? 'orange' : 'red';
+    span.style.color = color;
+    output.appendChild(line);
+    line.appendChild(span);
+  }
+
+  // -------------------------------------------------------------------------
+  // 5. Helper Functions
+  // -------------------------------------------------------------------------
+
+  // --- Validation Logic ---
+
   function isFormValid() {
     return (
       validateNameField(nameField.value) &&
@@ -35,11 +95,6 @@ document.addEventListener('DOMContentLoaded', () => {
       validatePhone(phoneField.value) &&
       validateAddress(addressField.value)
     );
-  }
-
-  function updateSubmitState() {
-    if (!submitButton) return;
-    submitButton.disabled = !isFormValid();
   }
 
   function validateNameField(value) {
@@ -63,10 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
     return trimmedValue !== '' && trimmedValue.length >= 5 && /[a-zA-Z0-9]/.test(trimmedValue);
   }
 
+  // --- DOM/UI Updates ---
+
+  function updateSubmitState() {
+    if (!submitButton) return;
+    submitButton.disabled = !isFormValid();
+  }
+
   function applyValidationState(field, isValid) {
     field.classList.toggle('is-valid', !!isValid);
     field.classList.toggle('is-invalid', !isValid);
   }
+
+  // --- Setup Helpers ---
 
   function setupFieldValidation(field, validationFunc) {
     if (!field) return;
@@ -79,25 +143,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     field.addEventListener('input', validateField);
     field.addEventListener('blur', validateField);
-  }
-
-  // --- Lithuanian phone masking & digit-only enforcement ---
-  // Helper: normalize raw digits and return full 8-digit national mobile number (including leading '6')
-  function extractLithuanianNationalNumber(digits) {
-    if (!digits) return '';
-    if (digits.startsWith('3706')) digits = digits.slice(4);
-    if (digits.length > 7) digits = digits.slice(0, 7);
-    return digits;
-  }
-
-  // Format national digits into "+370 6xx xxxxx" progressively
-  function formatLithuanianPhoneFromDigits(digits) {
-    const national = extractLithuanianNationalNumber(digits);
-    if (!national) return '';
-    // Progressive formatting: first 3 digits (6xx), rest (up to 5)
-    const firstGroup = national.slice(0, 2);
-    const rest = national.slice(2);
-    return rest ? `+370 6${firstGroup} ${rest}` : `+370 6${firstGroup}`;
   }
 
   function setupPhoneMask(field) {
@@ -139,62 +184,25 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
+  // --- Formatting & Utils ---
 
-  // --- Submission ---
-  form.addEventListener('submit', (e) => {
-    e.preventDefault();
+  // Helper: normalize raw digits and return full 8-digit national mobile number (including leading '6')
+  function extractLithuanianNationalNumber(digits) {
+    if (!digits) return '';
+    if (digits.startsWith('3706')) digits = digits.slice(4);
+    if (digits.length > 7) digits = digits.slice(0, 7);
+    return digits;
+  }
 
-    if (!isFormValid()) {
-      return;
-    }
-    // const isNameValid = validateNameField(nameField.value);
-    // const isSurnameValid = validateNameField(surnameField.value);
-    // const isEmailValid = validateEmail(emailField.value);
-    // const isPhoneValid = validatePhone(phoneField.value);
-    // const isAddressValid = validateAddress(addressField.value);
-
-    // // Update validation states using helper function
-    // applyValidationState(nameField, isNameValid);
-    // applyValidationState(surnameField, isSurnameValid);
-    // applyValidationState(emailField, isEmailValid);
-    // applyValidationState(phoneField, isPhoneValid);
-    // applyValidationState(addressField, isAddressValid);
-
-    // // Only proceed if all validations pass
-    // if (!isNameValid || !isSurnameValid || !isEmailValid || !isPhoneValid || !isAddressValid) {
-    //   return;
-    // }
-
-    // collect values
-    const fd = new FormData(form);
-    const data = {};
-    for (const [key, value] of fd.entries()) {
-      data[key] = value;
-    }
-
-    let output = document.getElementById('form-output');
-
-    // clear previous content and render lines
-    output.innerHTML = '';
-    Object.entries(data).forEach(([k, v]) => {
-      const line = document.createElement('div');
-      const text = `${niceLabel(k)}: ${Array.isArray(v) ? v.join(', ') : v}`;
-      line.textContent = text;
-      console.log(text);
-      output.appendChild(line);
-    });
-
-    // print average rating
-    let average_rating = calculateAverageRating(data);
-    const line = document.createElement('div');
-    line.textContent = `${data.name} ${data.surname}: `;
-    const span = document.createElement('span');
-    span.textContent = `${average_rating}`;
-    let color = average_rating > 6 ? 'green' : average_rating > 3 ? 'orange' : 'red';
-    span.style.color = color;
-    output.appendChild(line);
-    line.appendChild(span);
-  });
+  // Format national digits into "+370 6xx xxxxx" progressively
+  function formatLithuanianPhoneFromDigits(digits) {
+    const national = extractLithuanianNationalNumber(digits);
+    if (!national) return '';
+    // Progressive formatting: first 3 digits (6xx), rest (up to 5)
+    const firstGroup = national.slice(0, 2);
+    const rest = national.slice(2);
+    return rest ? `+370 6${firstGroup} ${rest}` : `+370 6${firstGroup}`;
+  }
 
   function calculateAverageRating(data) {
     const ratingKeys = Object.keys(data).filter(key => key.startsWith('rating'));
